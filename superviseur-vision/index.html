@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Superviseur Vision — Étude de cas Business Intelligence · Hiba Kourda</title>
+<meta name="description" content="Étude de cas du prototype « Superviseur Vision » : base SQL Server, tableau de bord Power BI de six pages et mesures DAX, réalisés individuellement en stage chez SOTETEL avec des données fictives.">
+<meta name="theme-color" content="#0d1226">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Superviseur Vision — Étude de cas BI">
+<meta property="og:description" content="Prototype de supervision décisionnelle : SQL Server, Power BI et DAX. Données fictives.">
+<!-- og:image volontairement absent : nécessite une URL absolue publique à renseigner une fois le site en ligne. -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230d1226'/%3E%3Ctext x='32' y='41' font-size='26' font-family='sans-serif' font-weight='700' text-anchor='middle' fill='%23a78bfa'%3EHK%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="sv">
+<a class="sv-skip" href="#main">Aller au contenu</a>
+
+<header class="sv-nav">
+  <div class="sv-wrap sv-nav__in">
+    <a class="sv-logo" href="#debut" aria-label="Hiba Kourda, début de la page">HK</a>
+    <button class="sv-nav__toggle" aria-expanded="false" aria-controls="sv-menu" aria-label="Ouvrir le menu"><span></span><span></span></button>
+    <nav id="sv-menu" class="sv-nav__menu" aria-label="Navigation de l'étude de cas">
+      <!-- CONFIG : chemin relatif vers le portfolio (ce dossier est supposé être superviseur-vision/ à la racine du dépôt) -->
+      <a href="../index.html#projets">← Portfolio</a>
+      <a href="#projet">Projet</a><a href="#architecture">Architecture</a><a href="#indicateurs">Indicateurs</a>
+      <a href="#dashboard">Dashboard</a><a href="#documentation">Documentation</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="sv-hero" id="debut">
+  <div class="sv-wrap sv-hero__in">
+    <div class="sv-hero__text">
+      <p class="sv-kicker">Étude de cas · Business Intelligence</p>
+      <h1>Superviseur Vision</h1>
+      <p class="sv-hero__sub">Un prototype de supervision décisionnelle pour suivre délais, blocages, priorités et charge de travail des dossiers techniques télécoms.</p>
+      <p class="sv-hero__intro">À partir d'un cahier des charges, j'ai modélisé une base SQL Server, préparé un jeu de données de démonstration, puis construit un tableau de bord Power BI de six pages, ses mesures DAX et sa documentation.</p>
+      <ul class="sv-tags" aria-label="Technologies principales"><li>SQL Server</li><li>T-SQL</li><li>Power BI Desktop</li><li>DAX</li><li>Modélisation relationnelle</li></ul>
+      <p class="sv-meta"><strong>Stage SOTETEL · juillet 2026</strong> (un mois) · Hiba Kourda</p>
+      <p class="sv-note">Prototype réalisé individuellement à partir d'un cahier des charges, avec des données fictives.</p>
+      <div class="sv-btns">
+        <a class="sv-btn sv-btn--primary" href="#projet">Explorer le projet</a>
+        <a class="sv-btn sv-btn--ghost" href="#dashboard">Découvrir le dashboard</a>
+      </div>
+    </div>
+    <figure class="sv-window">
+      <div class="sv-window__bar" aria-hidden="true"><i></i><i></i><i></i><span>Power BI Desktop — Accueil superviseur</span></div>
+      <img src="assets/img/accueil.png" width="1260" height="702" alt="Page d'accueil du tableau de bord Superviseur Vision.">
+      <figcaption>Capture réelle du dashboard (données fictives, état du 04/08/2026).</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="sv-sec" id="projet">
+  <div class="sv-wrap">
+    <p class="sv-eyebrow">01 · Contexte</p>
+    <h2>Un besoin de lecture consolidée</h2>
+    <div class="sv-split">
+      <div>
+        <p>Dans un environnement multi-intervenants, les informations de suivi sont dispersées entre fichiers, tableaux et échanges e-mail. Le superviseur doit pourtant suivre l'avancement, les échéances et retards, les blocages, la criticité, la priorité de traitement et la charge de chacun.</p>
+        <blockquote class="sv-quote">Comment consolider ces informations et faciliter leur lecture grâce à une base structurée et un tableau de bord décisionnel ?</blockquote>
+        <p class="sv-small">Le portefeuille suit sept phases : recherche de site, acquisition, coordination/mailing, DAO, APS, APD et validation.</p>
+      </div>
+      <div>
+        <h3 class="sv-h3">Objectifs du cahier des charges</h3>
+        <ol class="sv-goals">
+          <li>Structurer un modèle simple de données : dossiers, phases, statuts, intervenants, dates clés.</li>
+          <li>Définir un référentiel d'indicateurs de supervision et d'aide à la décision.</li>
+          <li>Concevoir un dashboard clair, filtrable et exploitable par un superviseur.</li>
+          <li>Mettre en évidence retards, blocages et charges par intervenant.</li>
+          <li>Proposer une logique de risque simple, fondée sur des règles métier.</li>
+          <li>Documenter le prototype, les règles de calcul et les limites.</li>
+        </ol>
+      </div>
+    </div>
+
+    <p class="sv-eyebrow sv-mt">02 · Ma contribution</p>
+    <h2>Un travail individuel, de la modélisation à la documentation</h2>
+    <div class="sv-axes">
+      <article><span>1</span><h3>Analyse et modèle</h3><p>Analyse du cahier des charges et conception du modèle de données.</p></article>
+      <article><span>2</span><h3>Base SQL Server</h3><p>Création de la base et préparation d'un jeu de données fictif.</p></article>
+      <article><span>3</span><h3>Power BI et DAX</h3><p>Construction du tableau de bord et des mesures DAX.</p></article>
+      <article><span>4</span><h3>Finalisation</h3><p>Vérification, corrections et documentation du prototype.</p></article>
+    </div>
+    <ol class="sv-time" aria-label="Chronologie des quatre semaines">
+      <li><b>Semaine 1</b><p>Modélisation de la base de données.</p></li>
+      <li><b>Semaine 2</b><p>Accueil superviseur et vue Délais et Retards.</p></li>
+      <li><b>Semaine 3</b><p>Blocages, Priorités et Score de risque, Fiche Dossier.</p></li>
+      <li><b>Semaine 4</b><p>Charge par Intervenant, corrections, finalisation et documentation.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="sv-sec sv-alt" id="architecture">
+  <div class="sv-wrap">
+    <p class="sv-eyebrow">03 · Architecture</p>
+    <h2>De la base de données au tableau de bord</h2>
+    <ol class="sv-flow" aria-label="Flux général du projet">
+      <li>Cahier des charges</li><li>Modélisation relationnelle</li><li>SQL Server et données fictives</li><li>Import dans Power BI Desktop</li><li>Modèle de données et mesures DAX</li><li>Tableau de bord décisionnel</li><li>Documentation</li>
+    </ol>
+
+    <h3 class="sv-h3 sv-mt">Les neuf tables de la base « SuperviseurVision »</h3>
+    <p class="sv-small">Sélectionnez une table pour voir son rôle, ses clés et ses colonnes (source : dictionnaire de données).</p>
+    <div class="sv-tables">
+      <div class="sv-tabs" role="tablist" aria-label="Tables de la base" id="sv-tbl-tabs"></div>
+      <div class="sv-tpanel" id="sv-tbl-panel" role="tabpanel" aria-live="polite"></div>
+    </div>
+    <ul class="sv-points">
+      <li><strong>Table centrale.</strong> Dossier concentre l'information métier et porte les clés vers la phase, le statut et le responsable d'origine.</li>
+      <li><strong>Référentiels et suivi.</strong> Phase, Statut et Intervenant qualifient le dossier ; Echeance, Blocage et Evenement conservent son historique.</li>
+      <li><strong>Affectations multiples.</strong> Dossier_Intervenant relie dossiers et intervenants (responsable principal et collaborateurs) ; un même couple n'y apparaît qu'une fois.</li>
+      <li><strong>Pondération.</strong> Phase_Poids associe à chaque phase un coefficient de charge de 0,5 à 1,5, utilisé pour la charge pondérée.</li>
+    </ul>
+
+    <figure class="sv-model">
+      <button class="sv-zoom" data-open="modele" aria-label="Agrandir le schéma relationnel du modèle Power BI">
+        <img src="assets/img/modele.png" width="1339" height="707" loading="lazy" alt="Schéma relationnel du modèle Power BI.">
+        <span class="sv-zoom__hint">Agrandir</span>
+      </button>
+      <figcaption>Modèle tel qu'implémenté dans Power BI, avec colonnes calculées et la table déconnectée « Seuil de charge max » servant de paramètre de simulation.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="sv-sec" id="indicateurs">
+  <div class="sv-wrap">
+    <p class="sv-eyebrow">04 · KPI et logique métier</p>
+    <h2>Des indicateurs lisibles, des règles explicites</h2>
+    <p class="sv-lead">Chaque indicateur répond à une question du superviseur. Choisissez une famille pour voir sa finalité, son principe de calcul et sa lecture.</p>
+    <div class="sv-kpi">
+      <div class="sv-tabs sv-tabs--v" role="tablist" aria-label="Familles d'indicateurs" id="sv-kpi-tabs"></div>
+      <div class="sv-kpi__panel" id="sv-kpi-panel" role="tabpanel" aria-live="polite"></div>
+    </div>
+    <p class="sv-small">Code couleur commun à trois niveaux (vert, orange, rouge) pour les taux, avec des objectifs de référence : retard 15 %, blocage 10 %, clôture 50 %, priorité critique 15 %, surcharge 15 %.</p>
+    <!-- VÉRIFICATION À FAIRE (cf. rapport) : le signe de la mesure Delai (date_cible − aujourd'hui) est utilisé de façon contradictoire
+         entre le score de risque (retard si Delai < 0) et « Nombre dossier retard » / « Libellé Délai » (retard si Delai > 0).
+         Aucune valeur chiffrée de retard n'est donc publiée dans le texte ; la règle est énoncée en mots (date cible dépassée + dossier non clôturé). -->
+
+    <details class="sv-score" id="sv-score">
+      <summary>Comprendre le score de risque</summary>
+      <div class="sv-score__body">
+        <p>Le score additionne trois composantes, calculées pour chaque dossier. C'est une <strong>règle métier déterministe</strong>, avec des seuils fixés manuellement : un mécanisme de notation et d'aide à la décision, pas un modèle de machine learning ni un modèle prédictif statistique.</p>
+        <div class="sv-score__grid">
+          <div><h4>Points de retard</h4><table><caption class="sv-vh">Points selon les jours de dépassement</caption><tr><th>Dépassement</th><th>Points</th></tr><tr><td>Aucun</td><td>0</td></tr><tr><td>1 à 15 jours</td><td>10</td></tr><tr><td>16 à 31 jours</td><td>20</td></tr><tr><td>32 à 60 jours</td><td>30</td></tr><tr><td>Plus de 60 jours</td><td>40</td></tr></table></div>
+          <div><h4>Criticité déclarée</h4><table><caption class="sv-vh">Points selon la criticité</caption><tr><th>Criticité</th><th>Points</th></tr><tr><td>Critique</td><td>30</td></tr><tr><td>Élevée</td><td>20</td></tr><tr><td>Moyenne</td><td>10</td></tr><tr><td>Faible</td><td>0</td></tr></table></div>
+          <div><h4>Échéance proche</h4><p class="sv-small">+15 points si la date cible tombe dans les 7 prochains jours sans être dépassée.</p><h4>Catégories</h4><ul class="sv-cats"><li><i style="--c:#D32F2F"></i>Critique : 65 et plus</li><li><i style="--c:#F57C00"></i>Élevée : 45 et plus</li><li><i style="--c:#FBC02D"></i>Moyenne : 25 et plus</li><li><i style="--c:#81C784"></i>Faible : moins de 25</li></ul></div>
+        </div>
+        <div class="sv-sim" aria-labelledby="sv-sim-t">
+          <h4 id="sv-sim-t">Simulateur illustratif des règles</h4>
+          <p class="sv-small">Il applique les règles ci-dessus à un cas imaginaire. Ce n'est pas une donnée du dashboard.</p>
+          <div class="sv-sim__row">
+            <label>Jours de dépassement<select id="sv-s-late"><option value="0">Aucun</option><option value="10">1 à 15</option><option value="20">16 à 31</option><option value="30">32 à 60</option><option value="40">Plus de 60</option></select></label>
+            <label>Criticité<select id="sv-s-crit"><option value="0">Faible</option><option value="10">Moyenne</option><option value="20">Élevée</option><option value="30">Critique</option></select></label>
+            <label class="sv-check"><input type="checkbox" id="sv-s-soon"> Échéance dans les 7 jours</label>
+          </div>
+          <p class="sv-sim__out" role="status" aria-live="polite">Score : <b id="sv-s-score">0</b> · Priorité : <b id="sv-s-cat">Faible</b></p>
+        </div>
+      </div>
+    </details>
+  </div>
+</section>
+
+<section class="sv-sec sv-alt" id="dashboard">
+  <div class="sv-wrap">
+    <p class="sv-eyebrow">05 · Le dashboard</p>
+    <h2>Six pages, six questions du superviseur</h2>
+    <p class="sv-lead">Les captures sont celles du fichier Power BI, développé et démontré en local. Cette galerie permet de les explorer ; elle ne reproduit pas l'interactivité du dashboard.</p>
+    <div class="sv-gallery">
+      <div class="sv-tabs sv-tabs--g" role="tablist" aria-label="Pages du dashboard" id="sv-g-tabs"></div>
+      <div class="sv-gpanel" id="sv-g-panel" role="tabpanel" aria-live="polite"></div>
+    </div>
+    <p class="sv-small">Valeurs visibles dans les captures : jeu de démonstration au 04/08/2026 (100 dossiers, 30 blocages enregistrés). Il ne s'agit ni de données réelles ni de résultats métier mesurés.</p>
+  </div>
+</section>
+
+<section class="sv-sec" id="documentation">
+  <div class="sv-wrap">
+    <p class="sv-eyebrow">06 · Documentation et livrables</p>
+    <h2>Ce que le projet a produit</h2>
+    <div class="sv-btns sv-docs-intro">
+      <a
+        class="sv-btn sv-btn--primary"
+        href="https://drive.google.com/drive/folders/1kHwGhbYKwl1Cgm60f2xBfRG6u0o-PcJK?usp=drive_link"
+        target="_blank"
+        rel="noopener noreferrer">
+        Consulter la documentation complète sur Drive ↗
+      </a>
+    </div>
+    <div class="sv-chips" role="group" aria-label="Filtrer par catégorie" id="sv-d-chips"></div>
+    <div class="sv-docs" id="sv-docs"></div>
+  </div>
+</section>
+
+<section class="sv-sec sv-alt" id="limites">
+  <div class="sv-wrap">
+    <p class="sv-eyebrow">07 · Recul</p>
+    <h2>Limites et perspectives</h2>
+    <div class="sv-lp">
+      <article class="sv-lp__done"><h3>Réalisé</h3><ul>
+        <li>Base SQL Server de neuf tables, avec clés et contraintes d'intégrité.</li>
+        <li>Scripts T-SQL de création et de remplissage d'un jeu de données fictif.</li>
+        <li>Tableau de bord Power BI de six pages et mesures DAX, démontré localement dans Power BI Desktop.</li>
+        <li>Dictionnaire de données, référentiel des KPI, guide utilisateur, limites et présentation finale.</li></ul></article>
+      <article class="sv-lp__no"><h3>Non réalisé</h3><ul>
+        <li>Déploiement en production ou usage sur des données réelles de l'entreprise.</li>
+        <li>Connexion temps réel : les données sont importées puis actualisées manuellement.</li>
+        <li>Publication sur Power BI Service (partage, actualisation planifiée, alertes) : licence professionnelle indisponible.</li>
+        <li>Gestion des droits d'accès : tous les utilisateurs du fichier voient tous les dossiers.</li>
+        <li>Modèle statistique ou d'apprentissage automatique.</li>
+        <li>Affectations multiples limitées à environ un tiers des dossiers de démonstration.</li></ul></article>
+      <article class="sv-lp__next"><h3>Pistes futures <em>(non implémentées)</em></h3><ul>
+        <li>Publier sur Power BI Service avec un compte professionnel.</li>
+        <li>Automatiser l'alimentation depuis un système source réel.</li>
+        <li>Ajouter la sécurité au niveau ligne (RLS).</li>
+        <li>Affiner les seuils du score avec un historique plus long de données réelles.</li>
+        <li>Ajouter des notifications automatiques et étendre la couche géographique.</li></ul></article>
+    </div>
+  </div>
+</section>
+
+<section class="sv-sec" id="competences">
+  <div class="sv-wrap">
+    <p class="sv-eyebrow">08 · Compétences</p>
+    <h2>Compétences mobilisées</h2>
+    <div class="sv-skills">
+      <div><h3>Données et SQL</h3><ul class="sv-tags"><li>SQL Server</li><li>T-SQL</li><li>Modélisation relationnelle</li><li>Clés primaires et étrangères</li><li>Relation many-to-many</li><li>Données de démonstration</li></ul></div>
+      <div><h3>Power BI et DAX</h3><ul class="sv-tags"><li>Power BI Desktop</li><li>DAX</li><li>Contexte de filtre</li><li>Mesures et colonnes calculées</li><li>Drill-through</li><li>Mise en forme conditionnelle</li></ul></div>
+      <div><h3>Analyse et conception</h3><ul class="sv-tags"><li>KPI d'aide à la décision</li><li>Conception de visualisations</li><li>Règles métier et score</li><li>Vérification du modèle</li></ul></div>
+      <div><h3>Documentation</h3><ul class="sv-tags"><li>Dictionnaire de données</li><li>Référentiel des KPI</li><li>Guide utilisateur</li><li>Limites et recommandations</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="sv-sec sv-end" id="conclusion">
+  <div class="sv-wrap sv-end__in">
+    <p class="sv-eyebrow">09 · Conclusion</p>
+    <h2>Un prototype complet, présenté pour ce qu'il est</h2>
+    <p>Superviseur Vision m'a permis de mener un projet décisionnel de bout en bout : modéliser des données, écrire des mesures DAX, concevoir un dashboard de six pages et documenter ses règles. C'est un prototype de démonstration sur données fictives, dont les limites et les évolutions possibles sont identifiées.</p>
+    <div class="sv-btns">
+      <a class="sv-btn sv-btn--primary" href="../index.html#projets">Retour à mon portfolio</a>
+      <a class="sv-btn sv-btn--ghost" href="#debut">Haut de page</a>
+      <a class="sv-btn sv-btn--ghost" href="mailto:hiba.kourda.2025@ihec.ucar.tn">Me contacter par e-mail</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="sv-foot"><div class="sv-wrap"><p>© <span id="sv-year">2026</span> Hiba Kourda · Projet de stage SOTETEL, données fictives</p></div></footer>
+
+<dialog class="sv-viewer" id="sv-viewer" aria-labelledby="sv-v-cap">
+  <div class="sv-viewer__bar">
+    <p id="sv-v-cap"></p>
+    <div>
+      <button type="button" id="sv-v-size" aria-pressed="false">Taille réelle</button>
+      <button type="button" id="sv-v-prev" aria-label="Image précédente">←</button>
+      <button type="button" id="sv-v-next" aria-label="Image suivante">→</button>
+      <button type="button" id="sv-v-close" aria-label="Fermer la visionneuse">Fermer ✕</button>
+    </div>
+  </div>
+  <div class="sv-viewer__stage" id="sv-v-stage"><img id="sv-v-img" alt=""></div>
+</dialog>
+<script src="script.js"></script>
+</body>
+</html>
